@@ -34,6 +34,7 @@ def load_arxiv():
 
     return data
 
+# load unnormalized Cora
 def load_cora():
     dataset = Planetoid(root='data/Planetoid', name='Cora')
     data = dataset[0]
