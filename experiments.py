@@ -16,7 +16,7 @@ def run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device)
     test_accs.append(test_acc)
     avg_acc = sum(test_accs) / len(test_accs)
 
-  return avg_acc, train_losses, train_accs, val_losses, val_accs, best_epoch
+  return avg_acc, test_accs, train_losses, train_accs, val_losses, val_accs, best_epoch
 
 def reset_weights(model):
     for layer in model.children():
