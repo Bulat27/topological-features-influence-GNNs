@@ -35,7 +35,7 @@ def load_arxiv():
     return data
 
 def load_cora():
-    dataset = Planetoid(root='data/Planetoid', name='Cora', transform=NormalizeFeatures())
+    dataset = Planetoid(root='data/Planetoid', name='Cora')
     data = dataset[0]
     data.name = dataset.name
     data.num_classes = dataset.num_classes
