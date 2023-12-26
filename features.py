@@ -53,8 +53,7 @@ def concatenate_features(X,features):
 # 1. convert graph to undirected
 # 2. compute topological features
 # 3. return data with additional features 
-def create_data_with_features(data):
-    G, data = data_to_undirected(data)
+def create_data_with_features(G,data):
     features = compute_features(G)
     X = concatenate_features(data.x,features)
     data_features = Data(x=X, edge_index=data.edge_index, y=data.y, train_mask=data.train_mask, val_mask=data.val_mask, test_mask=data.test_mask, name=data.name, num_classes=data.num_classes)
