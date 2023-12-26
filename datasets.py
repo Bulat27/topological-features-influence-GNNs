@@ -8,6 +8,10 @@ from torch_geometric.transforms import NormalizeFeatures
 def load_data(dataset_name):
     if dataset_name == 'ogbn-arxiv':
         return load_arxiv()
+    elif dataset_name == 'citeseer':
+        return load_citeseer()
+    elif dataset_name == 'pubmed':
+        return load_pubmed()
     else:
         return load_cora()
 
@@ -34,14 +38,25 @@ def load_arxiv():
 
     return data
 
-# load unnormalized Cora
-def load_cora():
-    dataset = Planetoid(root='data/Planetoid', name='Cora')
+def load_planetoid(dataset):
     data = dataset[0]
     data.name = dataset.name
     data.num_classes = dataset.num_classes
-    
+
     return data
+
+def load_cora():
+    dataset = Planetoid(root='data/Planetoid', name='Cora', transform=NormalizeFeatures())
+    return load_planetoid(dataset)
+
+def load_citeseer():
+    dataset = Planetoid(root='data/Planetoid', name='CiteSeer', transform=NormalizeFeatures())
+    return load_planetoid(dataset)
+
+def load_pubmed():
+    dataset = Planetoid(root='data/Planetoid', name='PubMed', transform=NormalizeFeatures())
+    return load_planetoid(dataset)
+
 
 def dataset_stats(data):
     print('Name:', data.name)
