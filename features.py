@@ -50,10 +50,8 @@ def concatenate_features(X,features):
 
     return torch.tensor(X_list)
 
-# 1. compute topological features
-# 2. return data with additional features 
-def create_data_with_features(G,data):
-    features = compute_features(G)
+# create new data with the concatenation of additional features
+def create_data_with_features(data,features):
     X = concatenate_features(data.x,features)
     data_features = Data(x=X, edge_index=data.edge_index, y=data.y, train_mask=data.train_mask, val_mask=data.val_mask, test_mask=data.test_mask, name=data.name, num_classes=data.num_classes)
 
