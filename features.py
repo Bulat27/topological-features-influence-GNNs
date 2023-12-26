@@ -50,9 +50,8 @@ def concatenate_features(X,features):
 
     return torch.tensor(X_list)
 
-# 1. convert graph to undirected
-# 2. compute topological features
-# 3. return data with additional features 
+# 1. compute topological features
+# 2. return data with additional features 
 def create_data_with_features(G,data):
     features = compute_features(G)
     X = concatenate_features(data.x,features)
