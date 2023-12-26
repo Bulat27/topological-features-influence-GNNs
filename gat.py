@@ -1,6 +1,7 @@
 import torch
 from torch_geometric.nn import GATConv
 import torch.nn as nn
+import torch.nn.functional as F
 
 # The number of hidden_channels is multiplied by the number of heads.
 class GAT(torch.nn.Module):
