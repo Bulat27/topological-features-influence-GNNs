@@ -1,6 +1,7 @@
 import torch
 import time
 
+# Either add the variance among the accuracies in different runs here or remember to measure it!
 def run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device):
   data = data.to(device)
   model = model.to(device)
