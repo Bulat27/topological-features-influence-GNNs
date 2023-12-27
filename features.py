@@ -50,6 +50,10 @@ def concatenate_features(X,features):
 
     return torch.tensor(X_list)
 
+# concatenation between two tensors
+def concatenate(tensor1, tensor2):
+    return torch.cat((tensor1,tensor2),dim=-1)
+
 # create new data with the concatenation of additional features
 def create_data_with_features(data,features):
     X = concatenate_features(data.x,features)
