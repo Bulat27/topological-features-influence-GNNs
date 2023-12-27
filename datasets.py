@@ -3,17 +3,24 @@ from ogb.nodeproppred import PygNodePropPredDataset
 from torch_geometric.utils import index_to_mask
 from torch_geometric.datasets import Planetoid
 from torch_geometric.transforms import NormalizeFeatures
+from utilities import data_to_undirected, compute_graph
 
-
-def load_data(dataset_name):
+# return data and its graph
+# if undirected = True it transforms data and graph to undirected
+def load_data(dataset_name, undirected=True):
+    data = None
     if dataset_name == 'ogbn-arxiv':
-        return load_arxiv()
+        data = load_arxiv()
     elif dataset_name == 'citeseer':
-        return load_citeseer()
+        data = load_citeseer()
     elif dataset_name == 'pubmed':
-        return load_pubmed()
+        data = load_pubmed()
     else:
-        return load_cora()
+        data = load_cora()
+
+    if undirected:
+        return data_to_undirected(data)
+    return compute_graph(data,undirected), data
 
 # preprocess and load ogbn-arxiv dataset
 def load_arxiv():
@@ -46,18 +53,19 @@ def load_planetoid(dataset):
     return data
 
 def load_cora():
-    dataset = Planetoid(root='data/Planetoid', name='Cora', transform=NormalizeFeatures())
+    dataset = Planetoid(root='data/Planetoid', name='Cora')
     return load_planetoid(dataset)
 
 def load_citeseer():
-    dataset = Planetoid(root='data/Planetoid', name='CiteSeer', transform=NormalizeFeatures())
+    dataset = Planetoid(root='data/Planetoid', name='CiteSeer')
     return load_planetoid(dataset)
 
 def load_pubmed():
-    dataset = Planetoid(root='data/Planetoid', name='PubMed', transform=NormalizeFeatures())
+    dataset = Planetoid(root='data/Planetoid', name='PubMed')
     return load_planetoid(dataset)
 
 
+# print some stats about the data
 def dataset_stats(data):
     print('Name:', data.name)
     print('Number of graphs:', 1)
