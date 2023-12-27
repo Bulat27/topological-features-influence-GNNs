@@ -28,7 +28,6 @@ class GCNPre(torch.nn.Module):
 
     def forward(self, x, edge_index):
         # MLP preprocessing layer
-
         x = self.mlp_linear(x)
         x = F.relu(x)  
 
