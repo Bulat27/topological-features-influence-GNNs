@@ -5,8 +5,7 @@ from torch_geometric.data import Data
 from node2vec import run_training
 
 # compute structural features of graph G specified in feats
-# usage example 1: structural_features(G,'cc')
-# usage example 2: structural_features(G,'cc','bc','dc','nd')
+# usage example: structural_features(G,['cc','bc','dc'])
 def structural_features(G, feats):
     num_nodes = G.number_of_nodes()
     features = torch.zeros(num_nodes,0)
@@ -42,6 +41,10 @@ def structural_features(G, feats):
     
     return features
 
+# compute positional features of data
+def positional_features(data):
+    return run_training(data)
+
 # create new data with the concatenation of additional features
 def create_data_with_features(data,features):
     X = concatenate(data.x,features)
@@ -56,7 +59,3 @@ def create_data_with_features(data,features):
         num_classes=data.num_classes)
 
     return data_features
-
-def positional_features(data):
-    return run_training(data)
-
