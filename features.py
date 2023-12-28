@@ -7,7 +7,7 @@ from node2vec import run_training
 # compute structural features of graph G specified in feats
 # usage example 1: structural_features(G,'cc')
 # usage example 2: structural_features(G,'cc','bc','dc','nd')
-def structural_features(G,*feats):
+def structural_features(G, feats):
     num_nodes = G.number_of_nodes()
     features = torch.zeros(num_nodes,0)
     for feat in feats:

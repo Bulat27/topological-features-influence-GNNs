@@ -82,3 +82,14 @@ def eval(model, data, data_mask, criterion):
           loss = criterion(out[data_mask], data.y[data_mask])
           
       return acc, loss.item()
+
+def eval_raw(model, data, data_mask):
+    model.eval()
+
+    with torch.no_grad():
+        out = model(data.x, data.edge_index)
+        out = out[data_mask]
+
+    return out    
+        
+
