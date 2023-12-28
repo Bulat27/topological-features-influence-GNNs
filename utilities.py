@@ -3,6 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch_geometric.utils import to_networkx, from_networkx
 
+# row-normalizes the values in x (tensor of features) to sum-up to one
+def SumToOneNormalization(x):
+  return x.div(x.sum(dim=-1, keepdim=True).clamp(min=1.))
+
 # z-score normalization of a tensor
 def NormalizeTensor(data):
   return (data - torch.mean(data)) / torch.std(data)
@@ -66,5 +70,6 @@ def data_to_undirected(data):
 
   return G, data_unidirected
 
+# compute networkx graph from data
 def compute_graph(data, undirected):
   return to_networkx(data, to_undirected=undirected)
