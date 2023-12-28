@@ -36,6 +36,59 @@ def eval_raw(model, features, edge_index, data_mask):
 
     return out  
 
+# split_data
+# Here, we could also parametrize the split percentage that can be fine-tuned depending on the complexity
+# of the base models and the meta model.
+def get_data_split(data):
+    val_mask = data.val_mask
+
+    # Calculate the number of true values in val_mask
+    num_true_values = val_mask.sum().item()
+
+    # Calculate the number of true values for each split
+    num_true_values_20_percent = int(0.2 * num_true_values)
+    
+    # Generate indices of true values in val_mask
+    true_indices = torch.nonzero(val_mask).view(-1)
+
+    # Shuffle the true indices randomly once
+    shuffled_indices = true_indices[torch.randperm(num_true_values)]
+
+    # Split the shuffled indices into two parts
+    indices_20_percent = shuffled_indices[:num_true_values_20_percent]
+    indices_80_percent = shuffled_indices[num_true_values_20_percent:]
+
+    new_mask_20_percent = torch.zeros_like(val_mask, dtype=torch.bool)
+    new_mask_80_percent = torch.zeros_like(val_mask, dtype=torch.bool)
+
+    new_mask_20_percent[indices_20_percent] = True
+    new_mask_80_percent[indices_80_percent] = True
+
+    data.val_mask = new_mask_20_percent
+    data.ensemble_val_mask = new_mask_80_percent
+
+    return data
+
+# def split_data(indices_20_percent, indices_80_percent, data):
+#     val_mask = data.val_mask
+
+#     new_mask_20_percent = torch.zeros_like(val_mask, dtype=torch.bool)
+#     new_mask_80_percent = torch.zeros_like(val_mask, dtype=torch.bool)
+
+#     new_mask_20_percent[indices_20_percent] = True
+#     new_mask_80_percent[indices_80_percent] = True
+
+#     data.val_mask = new_mask_20_percent
+#     data.ensemble_val_mask = new_mask_80_percent
+
+#     return data
+
+
+
+    
+    
+
+
 
 
 
