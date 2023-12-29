@@ -30,11 +30,11 @@ def structural_features(G, feats):
                 community = list(lc_part[i])
                 for node in community:
                     lc[node] = len(community)
-            vals = MinMaxNormalization(lc)
+            vals = lc
         elif feat == 'nd':
-            vals = MinMaxNormalization(nx.average_neighbor_degree(G))
+            vals = nx.average_neighbor_degree(G)
         elif feat == 'kc':
-            vals = MinMaxNormalization(nx.core_number(G))
+            vals = nx.core_number(G)
 
         vals_tensor = dict_to_tensor(vals)
         features = concatenate(features,vals_tensor)
