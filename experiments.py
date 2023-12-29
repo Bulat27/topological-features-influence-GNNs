@@ -1,5 +1,6 @@
 import time
 from model import *
+from utilities import *
 
 # Either add the variance among the accuracies in different runs here or remember to measure it!
 def run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device):
@@ -30,5 +31,24 @@ def reset_weights(model):
         if hasattr(layer, 'reset_parameters'):
             layer.reset_parameters()
         else:
-            raise AttributeError(f'The layer {layer.__class__.__name__} does not have a reset_parameters method.') 
+            raise AttributeError(f'The layer {layer.__class__.__name__} does not have a reset_parameters method.')
         
+def run_feature_combinations(original_features, structural_features, positional_features, file_name, normalization=lambda x: x):
+    features_combinations = [original_features, structural_features, positional_features] # TODO: Add the concatenation of features
+    file_names = ['original', 'structural', 'positional', 'original-structural', 'original-positional', 'structural-positional', 'original-structural-positional']
+    basic_models = dict()
+
+    for curr_features, curr_file_name in zip(features_combinations, file_names):
+        data.x = curr_features
+        data.x = normalization(data.x)
+        results = dict()
+        results['avg_acc'], results['test_accs'], results['train_losses'], results['train_accs'], results['val_losses'], results['val_accs'], results['run_times'],
+        results['best_epoch'] = experiments.run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device) # These should be "global variables"
+
+        results['model'] = model
+     
+        basic_models[curr_file_name] = results
+
+    save_results(basic_models, file_name)
+   
+

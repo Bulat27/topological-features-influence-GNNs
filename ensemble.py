@@ -68,20 +68,6 @@ def split_data(data):
 
     return data
 
-# def split_data(indices_20_percent, indices_80_percent, data):
-#     val_mask = data.val_mask
-
-#     new_mask_20_percent = torch.zeros_like(val_mask, dtype=torch.bool)
-#     new_mask_80_percent = torch.zeros_like(val_mask, dtype=torch.bool)
-
-#     new_mask_20_percent[indices_20_percent] = True
-#     new_mask_80_percent[indices_80_percent] = True
-
-#     data.val_mask = new_mask_20_percent
-#     data.ensemble_val_mask = new_mask_80_percent
-
-#     return data
-
 
 
     
