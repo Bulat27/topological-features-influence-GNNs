@@ -8,8 +8,8 @@ def SumToOneNormalization(x):
   return x.div(x.sum(dim=-1, keepdim=True).clamp(min=1.))
 
 # z-score normalization of a tensor
-def NormalizeTensor(data):
-  return (data - torch.mean(data)) / torch.std(data)
+def NormalizeTensor(x):
+  return (x - torch.mean(x)) / torch.std(x)
 
 # min-max normalization of a dict
 def MinMaxNormalization(x):
