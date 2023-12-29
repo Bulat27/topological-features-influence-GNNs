@@ -8,27 +8,13 @@ import pickle as pk
 def SumToOneNormalization(x):
   return x.div(x.sum(dim=-1, keepdim=True).clamp(min=1.))
 
-# z-score normalization of a tensor
-def NormalizeTensor(x):
-  return (x - torch.mean(x)) / torch.std(x)
-
-# min-max normalization of a dict
+# min-max normalization of a tensor across columns
 def MinMaxNormalization(x):
-  x_val = list(x.values())
-  x_min = min(x_val)
-  x_max = max(x_val)
-  for key in x.keys():
-    x[key] = float((x[key]-x_min)/(x_max-x_min))
-  return x
+  return (x - x.min(dim=0).values) / (x.max(dim=0).values - x.min(dim=0).values)
 
-# z-score normalization of a dict
-def ZScoreNormalization(x):
-  x_val = list(x.values())
-  x_mean = np.mean(x_val)
-  x_std = np.std(x_val)
-  for key in x.keys():
-    x[key] = float((x[key]-x_mean)/x_std)
-  return x
+# standard normalization of a tensor across columns
+def StandardNormalization(x):
+  return (x - x.mean(dim=0)) / x.std(dim=0)
 
 def plot_results(n_epochs, train_losses, train_accs, val_losses, val_accs):
   N_EPOCHS = n_epochs
@@ -46,10 +32,9 @@ def plot_results(n_epochs, train_losses, train_accs, val_losses, val_accs):
   _ = plt.legend(['Train', 'Validation'])
   plt.grid('on'), plt.xlabel('Epoch'), plt.ylabel('Accuracy')
 
-# concatenate two 2D tensors so to extend the second dimension
-# e.g. x.size = [4,2], y.size = [4,5] -> concatenate(x,y).size = [4,7]
-def concatenate(tensor1, tensor2):
-  return torch.cat((tensor1,tensor2),dim=-1)
+# concatenate the tensors passed its variable-length input
+def concatenate(*tensors):
+  return torch.cat(tensors,dim=-1)
 
 # convert a python dictionary to a pytorch tensor of size [len(d),1]
 def dict_to_tensor(d):
@@ -75,11 +60,13 @@ def data_to_undirected(data):
 def compute_graph(data, undirected):
   return to_networkx(data, to_undirected=undirected)
 
+# obj is the object to be saved
+# obj_name is the name we want to assign to its file
 def save_results(obj, obj_name):
   filehandler = open(obj_name, 'wb')
   pk.dump(obj, filehandler)
 
-# filename is the name of the object we want to restore (it is a string)
+# filename is the name of the object we want to restore
 def load_results(filename):
   filehandler = open(filename, 'rb')
   obj = pk.load(filehandler)
