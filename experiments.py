@@ -33,7 +33,7 @@ def reset_weights(model):
         else:
             raise AttributeError(f'The layer {layer.__class__.__name__} does not have a reset_parameters method.')
         
-def run_feature_combinations(original_features, structural_features, positional_features, file_name, normalization=lambda x: x):
+def run_feature_combinations(model, data, n_runs, n_epochs, optimizer, criterion, device, original_features, structural_features, positional_features, file_name, normalization=lambda x: x):
     features_combinations = [
       original_features, 
       structural_features, 
@@ -57,14 +57,7 @@ def run_feature_combinations(original_features, structural_features, positional_
         data.x = curr_features
         data.x = normalization(data.x)
         results = dict()
-        results['avg_acc'], 
-        results['test_accs'], 
-        results['train_losses'], 
-        results['train_accs'], 
-        results['val_losses'], 
-        results['val_accs'], 
-        results['run_times'],
-        results['best_epoch'] = experiments.run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device) # These should be "global variables"
+        results['avg_acc'], results['test_accs'], results['train_losses'], results['train_accs'], results['val_losses'], results['val_accs'], results['run_times'],results['best_epoch'] = run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device) # These should be "global variables"
         results['model'] = model
      
         basic_models[curr_file_name] = results
