@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from torch_geometric.utils import to_networkx, from_networkx
+import pickle as pk
 
 # row-normalizes the values in x (tensor of features) to sum-up to one
 def SumToOneNormalization(x):
@@ -73,3 +74,13 @@ def data_to_undirected(data):
 # compute networkx graph from data
 def compute_graph(data, undirected):
   return to_networkx(data, to_undirected=undirected)
+
+def save_results(obj, obj_name):
+  filehandler = open(obj_name, 'wb')
+  pk.dump(obj, filehandler)
+
+# filename is the name of the object we want to restore (it is a string)
+def load_results(filename):
+  filehandler = open(filename, 'rb')
+  obj = pk.load(filehandler)
+  return obj
