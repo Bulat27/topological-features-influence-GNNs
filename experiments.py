@@ -33,7 +33,7 @@ def reset_weights(model):
         else:
             raise AttributeError(f'The layer {layer.__class__.__name__} does not have a reset_parameters method.')
         
-def run_feature_combinations(model, data, n_runs, n_epochs, optimizer, criterion, device, original_features, structural_features, positional_features, file_name, normalization=lambda x: x):
+def run_feature_combinations(original_features, structural_features, positional_features, file_name, normalization=lambda x: x):
     features_combinations = [
       original_features, 
       structural_features, 
