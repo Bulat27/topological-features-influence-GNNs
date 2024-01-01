@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch_geometric.utils import to_networkx, from_networkx
 import pickle as pk
+import os
 
 # row-normalizes the values in x (tensor of features) to sum-up to one
 def SumToOneNormalization(x):

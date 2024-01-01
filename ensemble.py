@@ -38,7 +38,7 @@ def eval_raw(model, features, edge_index, data_mask):
 
 # Here, we could also parametrize the split percentage that can be fine-tuned depending on the complexity
 # of the base models and the meta model.
-def split_data(data):
+def get_val_set_split(data):
     val_mask = data.val_mask
 
     # Calculate the number of true values in val_mask
@@ -63,10 +63,7 @@ def split_data(data):
     new_mask_20_percent[indices_20_percent] = True
     new_mask_80_percent[indices_80_percent] = True
 
-    data.val_mask = new_mask_20_percent
-    data.ensemble_val_mask = new_mask_80_percent
-
-    return data
+    return new_mask_20_percent, new_mask_80_percent
 
 
 
