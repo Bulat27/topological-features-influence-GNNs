@@ -53,15 +53,15 @@ def load_planetoid(dataset):
     return data
 
 def load_cora():
-    dataset = Planetoid(root='data/Planetoid', name='Cora')
+    dataset = Planetoid(root='data/Planetoid', name='Cora', transform=NormalizeFeatures())
     return load_planetoid(dataset)
 
 def load_citeseer():
-    dataset = Planetoid(root='data/Planetoid', name='CiteSeer')
+    dataset = Planetoid(root='data/Planetoid', name='CiteSeer', transform=NormalizeFeatures())
     return load_planetoid(dataset)
 
 def load_pubmed():
-    dataset = Planetoid(root='data/Planetoid', name='PubMed')
+    dataset = Planetoid(root='data/Planetoid', name='PubMed', transform=NormalizeFeatures())
     return load_planetoid(dataset)
 
 
