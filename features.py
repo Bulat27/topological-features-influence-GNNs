@@ -42,8 +42,8 @@ def structural_features(G, feats):
     return features
 
 # compute positional features of data
-def positional_features(data):
-    return run_training(data)
+def positional_features(data,n_iterations, embedding_dim):
+    return run_training(data,n_iterations, embedding_dim)
 
 # create new data with the concatenation of additional features
 def create_data_with_features(data,features):
