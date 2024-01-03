@@ -31,7 +31,7 @@ def get_meta_model_features(models, features, data_mask, edge_index, original_fe
     return concatenated_features
 
 def eval_raw_linear(model,data_x,data_mask):
-    out = model.predict(data_x.cpu())
+    out = model.predict(data_x.cpu().numpy())
     out = out[data_mask]
     
     return torch.tensor(out, device='cuda').reshape(len(out),1)
