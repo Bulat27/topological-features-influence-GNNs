@@ -1,6 +1,6 @@
 import torch
 
-def get_meta_model_features(models, features, data_mask, edge_index, original_features=True):
+def get_meta_model_features(models, features, data_mask, edge_index, original_features=True,linear=False):
     # Ensure that the number of models and features match
     assert len(models) == len(features), "Number of models and features must be the same"
 
@@ -9,7 +9,11 @@ def get_meta_model_features(models, features, data_mask, edge_index, original_fe
 
     # Obtain raw predictions for each model
     for model, data_x in zip(models, features):
-        raw_predictions = eval_raw(model, data_x, edge_index, data_mask)
+        if linear:
+            raw_predictions = eval_raw_linear(model,data_x,data_mask)
+        else:
+            raw_predictions = eval_raw(model, data_x, edge_index, data_mask)
+
         raw_predictions_list.append(raw_predictions)
 
     # Concatenate raw predictions along the last dimension
@@ -26,6 +30,11 @@ def get_meta_model_features(models, features, data_mask, edge_index, original_fe
 
     return concatenated_features
 
+def eval_raw_linear(model,data_x,data_mask):
+    out = model.predict(data_x.cpu())
+    out = out[data_mask]
+    
+    return torch.tensor(out, device='cuda').reshape(len(out),1)
 
 def eval_raw(model, features, edge_index, data_mask):
     model.eval()
