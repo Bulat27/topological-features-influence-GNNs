@@ -120,7 +120,10 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
     'best_ensemble']
 
   #plt.figure(figsize=(5, 10))
+  #plt.rcParams.update({'font.size': 14})
 
+  plt.rc('xtick',labelsize=14)
+  plt.rc('ytick',labelsize=14)
   # first plot with avg accs over 10 runs
   if dataset_name != 'cora':
     plt.figure(figsize=(15, 6))
@@ -132,9 +135,10 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
   plt.plot(np.arange(N_RUNS)+1, mlp_accs, linewidth=2)
   plt.plot(np.arange(N_RUNS)+1, ensemble_accs, linewidth=2)
 
-  _ = plt.legend(all_models_names)
-  plt.grid('on'), plt.xlabel('Run'), plt.ylabel('Test accuracy')
-  plt.title(f'{gnn_name.upper()} test accuracy on {dataset_name} dataset')
+  _ = plt.legend(all_models_names, fontsize="12.5", loc ="lower left")
+  plt.grid('on'), plt.xlabel('Run',fontsize="18"), plt.ylabel('Test accuracy',fontsize="18")
+  plt.title(f'{gnn_name.upper()} test accuracy on {dataset_name} dataset',fontsize="19")
+  plt.xticks(fontsize=14)
 
   if dataset_name != 'cora':
     # second plot with val accs over 200 epochs
@@ -146,8 +150,13 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
 
     plt.plot(np.arange(N_EPOCHS)+1, mlp_accs, linewidth=1.5)
     
-    _ = plt.legend(all_models_names)
-    plt.grid('on'), plt.xlabel('Epoch'), plt.ylabel('Validation accuracy')
-    plt.title(f'{gnn_name.upper()} validation accuracy on {dataset_name} dataset')
+    _ = plt.legend(all_models_names, fontsize="12.5", loc ="lower right")
+    plt.grid('on'), plt.xlabel('Epoch',fontsize="18"), plt.ylabel('Validation accuracy',fontsize="18")
+    plt.title(f'{gnn_name.upper()} validation accuracy on {dataset_name} dataset', fontsize="19")
 
   plt.savefig(os.path.join('./plots',f'{gnn_name}_{dataset_name}.pdf'))
+  #plt.show()
+
+
+
+#plot_test_val_accs_gnn('arxiv','gat')
