@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from torch_geometric.utils import to_networkx, from_networkx
 import pickle as pk
 import os
+import glob
+import math
 
 # row-normalizes the values in x (tensor of features) to sum-up to one
 def SumToOneNormalization(x):
@@ -16,22 +18,6 @@ def MinMaxNormalization(x):
 # standard normalization of a tensor across columns
 def StandardNormalization(x):
   return (x - x.mean(dim=0)) / x.std(dim=0)
-
-def plot_results(n_epochs, train_losses, train_accs, val_losses, val_accs):
-  N_EPOCHS = n_epochs
-  # Plot results
-  plt.figure(figsize=(20, 6))
-  _ = plt.subplot(1,2,1)
-  plt.plot(np.arange(N_EPOCHS)+1, train_losses, linewidth=3)
-  plt.plot(np.arange(N_EPOCHS)+1, val_losses, linewidth=3)
-  _ = plt.legend(['Train', 'Validation'])
-  plt.grid('on'), plt.xlabel('Epoch'), plt.ylabel('Loss')
-
-  _ = plt.subplot(1,2,2)
-  plt.plot(np.arange(N_EPOCHS)+1, train_accs, linewidth=3)
-  plt.plot(np.arange(N_EPOCHS)+1, val_accs, linewidth=3)
-  _ = plt.legend(['Train', 'Validation'])
-  plt.grid('on'), plt.xlabel('Epoch'), plt.ylabel('Accuracy')
 
 # concatenate the tensors passed its variable-length input
 def concatenate(*tensors):
@@ -72,3 +58,96 @@ def load_results(filename):
   filehandler = open(filename, 'rb')
   obj = pk.load(filehandler)
   return obj
+
+def retrieve_test_accs_ensemble(dataset_name, gnn_name):
+  paths = os.path.join('./data',dataset_name, gnn_name,'*ensemble*')
+  best_avg_acc = 0.0
+  best_accs = list()
+  for path in glob.glob(paths):
+    curr_file = load_results(path)
+    if curr_file['avg_acc'] > best_avg_acc:
+      best_avg_acc = curr_file['avg_acc']
+      best_accs = curr_file['test_accs']
+  return best_accs
+
+def retrieve_accs(dataset_name, gnn_name, word, split_accs):
+  paths = os.path.join('./data',dataset_name, gnn_name,f'*{word}*')
+  best_file = None
+  best_global_acc = 0.0
+  for path in glob.glob(paths):
+    curr_file = load_results(path)
+    curr_file_avg_acc = 0.0
+    for key in curr_file.keys():
+      curr_file_avg_acc = curr_file_avg_acc + curr_file[key]['avg_acc']
+    curr_file_avg_acc = curr_file_avg_acc / len(curr_file.keys())
+    
+    if curr_file_avg_acc > best_global_acc:
+      best_global_acc = curr_file_avg_acc
+      best_file = curr_file
+  
+  if word == 'base':
+    return [best_file['original'][split_accs], best_file['structural'][split_accs], best_file['positional'][split_accs], best_file['original-structural'][split_accs], best_file['original-positional'][split_accs], best_file['structural-positional'][split_accs], best_file['original-structural-positional'][split_accs]]
+  else:
+    best_avg_acc = 0.0
+    best_split_accs = list()
+    for key in best_file.keys():
+      if best_file[key]['avg_acc'] > best_avg_acc:
+        best_avg_acc = best_file[key]['avg_acc']
+        best_split_accs = best_file[key][split_accs]
+    return best_split_accs
+  
+
+def plot_test_val_accs_gnn(dataset_name, gnn_name):
+  N_RUNS = 10
+  N_EPOCHS = 200
+
+  base_all_models_accs = retrieve_accs(dataset_name, gnn_name, 'base', 'test_accs')
+  mlp_accs = retrieve_accs(dataset_name,gnn_name,'pre', 'test_accs')
+  # extend ensemble test accs list to size 10 (cause it's 5)
+  ensemble_accs = retrieve_test_accs_ensemble(dataset_name,gnn_name)
+  ensemble_accs = ensemble_accs * math.ceil(N_RUNS / len(ensemble_accs))  # expand to at least the wanted size
+  ensemble_accs = ensemble_accs[:N_RUNS]
+
+  all_models_names = [
+    'original', 
+    'structural', 
+    'positional',
+    'original-structural',
+    'original-positional',
+    'structural-positional',
+    'original-structural-positional',
+    'best_mlp',
+    'best_ensemble']
+
+  #plt.figure(figsize=(5, 10))
+
+  # first plot with avg accs over 10 runs
+  if dataset_name != 'cora':
+    plt.figure(figsize=(15, 6))
+    _ = plt.subplot(1,2,1)
+
+  for model_accs in base_all_models_accs:
+    plt.plot(np.arange(N_RUNS)+1, model_accs, linewidth=2)
+
+  plt.plot(np.arange(N_RUNS)+1, mlp_accs, linewidth=2)
+  plt.plot(np.arange(N_RUNS)+1, ensemble_accs, linewidth=2)
+
+  _ = plt.legend(all_models_names)
+  plt.grid('on'), plt.xlabel('Run'), plt.ylabel('Test accuracy')
+  plt.title(f'{gnn_name.upper()} test accuracy on {dataset_name} dataset')
+
+  if dataset_name != 'cora':
+    # second plot with val accs over 200 epochs
+    base_all_models_accs = retrieve_accs(dataset_name, gnn_name, 'base', 'val_accs')
+    mlp_accs = retrieve_accs(dataset_name,gnn_name,'pre', 'val_accs')
+    _ = plt.subplot(1,2,2)
+    for model_accs in base_all_models_accs:
+      plt.plot(np.arange(N_EPOCHS)+1, model_accs, linewidth=1.5)
+
+    plt.plot(np.arange(N_EPOCHS)+1, mlp_accs, linewidth=1.5)
+    
+    _ = plt.legend(all_models_names)
+    plt.grid('on'), plt.xlabel('Epoch'), plt.ylabel('Validation accuracy')
+    plt.title(f'{gnn_name.upper()} validation accuracy on {dataset_name} dataset')
+
+  plt.savefig(os.path.join('./plots',f'{gnn_name}_{dataset_name}.pdf'))
