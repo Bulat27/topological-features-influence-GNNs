@@ -3,7 +3,7 @@ from ogb.nodeproppred import PygNodePropPredDataset
 from torch_geometric.utils import index_to_mask
 from torch_geometric.datasets import Planetoid
 from torch_geometric.transforms import NormalizeFeatures
-from utilities import data_to_undirected, compute_graph
+from additional.utilities import data_to_undirected, compute_graph
 
 # return data and its graph
 # if undirected = True it transforms data and graph to undirected

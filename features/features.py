@@ -1,8 +1,8 @@
 import networkx as nx
-from utilities import * 
+from additional.utilities import * 
 from torch_geometric.utils import to_networkx, from_networkx
 from torch_geometric.data import Data
-from node2vec import run_training
+from features.node2vec import run_training
 
 # compute structural features of graph G specified in feats
 # usage example: structural_features(G,['cc','bc','dc'])

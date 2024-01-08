@@ -1,6 +1,6 @@
 import time
-from model import *
-from utilities import *
+from models.model import *
+from additional.utilities import *
 
 # Either add the variance among the accuracies in different runs here or remember to measure it!
 def run_experiments(model, data, n_runs, n_epochs, optimizer, criterion, device):

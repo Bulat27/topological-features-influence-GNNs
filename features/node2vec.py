@@ -1,7 +1,7 @@
 from torch_geometric.nn import Node2Vec
 from tqdm.notebook import tqdm
-from datasets import *
-from features import *
+from additional.datasets import *
+from features.features import *
 
 def train(model,optimizer,loader,device):
     model.train()
