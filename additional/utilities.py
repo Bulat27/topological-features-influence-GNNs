@@ -61,7 +61,6 @@ def load_results(filename):
 
 def retrieve_test_accs_ensemble(dataset_name, gnn_name):
   paths = os.path.join('./results',dataset_name, gnn_name,'*ensemble*')
-  print(paths)
   best_avg_acc = 0.0
   best_accs = list()
   for path in glob.glob(paths):
