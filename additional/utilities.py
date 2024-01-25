@@ -126,7 +126,7 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
   plt.rc('xtick',labelsize=14)
   plt.rc('ytick',labelsize=14)
   # first plot with avg accs over 10 runs
-  if dataset_name != 'cora':
+  if dataset_name == 'arxiv':
     plt.figure(figsize=(15, 6))
     _ = plt.subplot(1,2,1)
 
@@ -141,7 +141,7 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
   plt.title(f'{gnn_name.upper()} test accuracy on {dataset_name} dataset',fontsize="19")
   plt.xticks(fontsize=14)
 
-  if dataset_name != 'cora':
+  if dataset_name == 'arxiv':
     # second plot with val accs over 200 epochs
     base_all_models_accs = retrieve_accs(dataset_name, gnn_name, 'base', 'val_accs')
     mlp_accs = retrieve_accs(dataset_name,gnn_name,'pre', 'val_accs')
@@ -155,9 +155,9 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
     plt.grid('on'), plt.xlabel('Epoch',fontsize="18"), plt.ylabel('Validation accuracy',fontsize="18")
     plt.title(f'{gnn_name.upper()} validation accuracy on {dataset_name} dataset', fontsize="19")
 
-  plt.savefig(os.path.join('./plots',f'{gnn_name}_{dataset_name}.pdf'))
-  #plt.show()
+  #plt.savefig(os.path.join('./plots',f'{gnn_name}_{dataset_name}.pdf'))
+  plt.show()
 
 
 
-#plot_test_val_accs_gnn('cora','gcn')
+plot_test_val_accs_gnn('citeseer','gcn')
