@@ -155,9 +155,9 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
     plt.grid('on'), plt.xlabel('Epoch',fontsize="18"), plt.ylabel('Validation accuracy',fontsize="18")
     plt.title(f'{gnn_name.upper()} validation accuracy on {dataset_name} dataset', fontsize="19")
 
-  #plt.savefig(os.path.join('./plots',f'{gnn_name}_{dataset_name}.pdf'))
-  plt.show()
+  plt.savefig(os.path.join('./plots',f'{gnn_name}_{dataset_name}.pdf'))
+  #plt.show()
 
 
 
-plot_test_val_accs_gnn('citeseer','gcn')
+#plot_test_val_accs_gnn('citeseer','gcn')
