@@ -26,3 +26,11 @@ The folder `models` contains the implementations of the GCN and GAT models in Py
 The folder `features` contains the code used to compute the structural features using NetworkX, and the positional features using an implementation of Node2Vec in Pytorch Geometric.
 
 The folders `additional` and `plots` contains helper functions (e.g. datasets loading, normalization functions etc.) and plots of the results, respectively.
+
+The folder `results` contains all the experimental results saved using the Python module **pickle**. It is divided into two sub-folders `results/arxiv` and `results/cora`, each containing the results for the respective dataset. These results follow the organization:
+
+* `gat` -> results for the GAT architecture;
+* `gcn` -> results for the GCN architecture;
+* `linear` -> results for the three linear models.
+
+The folder `results/arxiv/topological features` also includes the structural and positional features extracted from the ArXiv dataset, since they can be quite expensive to compute.
