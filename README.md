@@ -1,5 +1,7 @@
 ## Evaluation of topological features’ influence on a node classification task using different GNN architectures
 
+A detailed description of the task, methodology, and the performed experiments is provided in the report.pdf file.
+
 The folder `colab notebooks` contains the three Google Colab notebooks we used to run all of the experiments related to this project. In particular, it contains:
 * **Experiments_GAT.ipynb**: used to run the experiments for the GAT architecture;
 * **Experiments_GCN.ipynb**: used to run the experiments for the GCN architecture;
