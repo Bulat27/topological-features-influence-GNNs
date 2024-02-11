@@ -60,7 +60,7 @@ def load_results(filename):
   return obj
 
 def retrieve_test_accs_ensemble(dataset_name, gnn_name):
-  paths = os.path.join('./data',dataset_name, gnn_name,'*ensemble*')
+  paths = os.path.join('./results',dataset_name, gnn_name,'*ensemble*')
   best_avg_acc = 0.0
   best_accs = list()
   for path in glob.glob(paths):
@@ -71,7 +71,7 @@ def retrieve_test_accs_ensemble(dataset_name, gnn_name):
   return best_accs
 
 def retrieve_accs(dataset_name, gnn_name, word, split_accs):
-  paths = os.path.join('./data',dataset_name, gnn_name,f'*{word}*')
+  paths = os.path.join('./results',dataset_name, gnn_name,f'*{word}*')
   best_file = None
   best_global_acc = 0.0
   for path in glob.glob(paths):
@@ -125,7 +125,7 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
   plt.rc('xtick',labelsize=14)
   plt.rc('ytick',labelsize=14)
   # first plot with avg accs over 10 runs
-  if dataset_name != 'cora':
+  if dataset_name == 'arxiv':
     plt.figure(figsize=(15, 6))
     _ = plt.subplot(1,2,1)
 
@@ -140,7 +140,7 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
   plt.title(f'{gnn_name.upper()} test accuracy on {dataset_name} dataset',fontsize="19")
   plt.xticks(fontsize=14)
 
-  if dataset_name != 'cora':
+  if dataset_name == 'arxiv':
     # second plot with val accs over 200 epochs
     base_all_models_accs = retrieve_accs(dataset_name, gnn_name, 'base', 'val_accs')
     mlp_accs = retrieve_accs(dataset_name,gnn_name,'pre', 'val_accs')
@@ -159,4 +159,4 @@ def plot_test_val_accs_gnn(dataset_name, gnn_name):
 
 
 
-#plot_test_val_accs_gnn('arxiv','gat')
+#plot_test_val_accs_gnn('citeseer','gcn')
